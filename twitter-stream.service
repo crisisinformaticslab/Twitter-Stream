@@ -1,0 +1,14 @@
+##Save this file at /etc/systemd/system/twitter-stream.service
+[Unit]
+Description=#####Descrition for your service here###
+After=network.target
+
+[Service]
+Type=simple
+User=###This user should have the AWS account configured and python code modules installed###
+ExecStart=/path_to_your_twitter-stream-initiator.sh
+TimeoutStartSec=0
+
+
+[Install]
+WantedBy=default.target
