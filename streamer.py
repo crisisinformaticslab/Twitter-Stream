@@ -10,7 +10,7 @@ from botocore.exceptions import ClientError
 
 # Below code will take care decrypting the bearer token that is saved as an environment variable in the OS.
 # You may need to manually created an encrypted bearer token using the similar code below but to encrypt. 
-key_id = ####YOUR KMS key ID here#####
+key_id = ####YOUR KMS key ARN here#####
 encrypted = os.environ['BEARER_TOKEN'].encode('utf-8')
 bearer_token = boto3.client('kms').decrypt(
     KeyId=key_id,
