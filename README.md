@@ -30,3 +30,4 @@ Usage:
         }
     ]
 }
+4. You need to have Kinesis stream, firehose delivery stream and S3 buckets created for this to all work properly. 
