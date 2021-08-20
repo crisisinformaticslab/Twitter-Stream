@@ -32,5 +32,5 @@ Usage:
 }
 4. You need to have Kinesis stream, firehose delivery stream and S3 buckets created for this to all work properly. 
 
-            ![Untitled](https://user-images.githubusercontent.com/9837020/130140354-0384e35f-df56-4eca-80eb-5965e8502722.png)
+                    [Untitled](https://user-images.githubusercontent.com/9837020/130140354-0384e35f-df56-4eca-80eb-5965e8502722.png)
 
