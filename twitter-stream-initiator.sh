@@ -1,6 +1,6 @@
 #!/bin/bash
 export BEARER_TOKEN=###Your encrypted bearer token here####
-/usr/bin/python3 /path_to_your_streamer.py/streamer.py >> /var/log/twitter-streamer.log 2>&1 &
+/usr/bin/python3 /path_to_your_streamer.py/streamer.py >> /var/log/twitter-streamer.log &
 jobid=$(echo $!)
 while [ -n "$jobid" ];
         do
