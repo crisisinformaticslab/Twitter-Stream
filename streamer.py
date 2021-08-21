@@ -23,30 +23,14 @@ bearer_token = boto3.client('kms').decrypt(
 def create_headers(bearer_token):
     headers = {"Authorization": "Bearer {}".format(bearer_token)}
     return headers
-
-
-# This function receives the stream and send it to Kinesis  which has a dedicated firehose configured
-def kinesis(data):
-    kinesis_name = ###YOUR Kinesis Stream here, should also have a firehose that is for this stream created first ###
-    # Set up logging
-    #    logging.basicConfig(level=logging.DEBUG,
-    #                        format='%(levelname)s: %(asctime)s: %(message)s')
-
-    kinesis_client = boto3.client('kinesis')
-    try:
-    kinesis_client.put_record(StreamName=kinesis_name,
-                              Data=data,
-                              PartitionKey="Twitter"
-                              )
-    except ClientError as e:
-        logging.error(e)
-        initiator()
-
+        
 
 # This is the streamer, in the case of disconnection, it shall reconnect again. Few data may be lost during reconnection
 def get_stream(headers):
     # Tone down your additonal fields here, you may not need all these
     additional_fields = "tweet.fields=attachments%2Cauthor_id%2Ccontext_annotations%2Cconversation_id%2Ccreated_at%2Centities%2Cgeo%2Cid%2Cin_reply_to_user_id%2Clang%2Cpublic_metrics%2Cpossibly_sensitive%2Creferenced_tweets%2Creply_settings%2Csource%2Ctext%2Cwithheld&user.fields=created_at%2Cdescription%2Centities%2Cid%2Clocation%2Cname%2Cpinned_tweet_id%2Cprofile_image_url%2Cprotected%2Cpublic_metrics%2Curl%2Cusername%2Cverified%2Cwithheld&expansions=attachments.poll_ids%2Cattachments.media_keys%2Cauthor_id%2Centities.mentions.username%2Cgeo.place_id%2Cin_reply_to_user_id%2Creferenced_tweets.id%2Creferenced_tweets.id.author_id"
+    kinesis_name = ###Your kinesis stream name####
+    kinesis_client = boto3.client('kinesis')
     response = requests.get(
         "https://api.twitter.com/2/tweets/search/stream?" + additional_fields, headers=headers, stream=True,
     )
@@ -57,8 +41,14 @@ def get_stream(headers):
             )
         )
     for response_line in response.iter_lines():
-        # print(response_line)
-        kinesis(response_line)
+        try:
+            kinesis_client.put_record(StreamName=kinesis_name,
+                                      Data=response_line,
+                                      PartitionKey="Twitter"
+                                      )
+        except ClientError as e:
+            logging.error(e)
+            initiator()
 
 
 def initiator():
